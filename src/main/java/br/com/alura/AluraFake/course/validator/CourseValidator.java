@@ -13,7 +13,7 @@ import java.util.Set;
 @Component
 public class CourseValidator {
 
-    public void validateBeforePublish(Course course, List<Task> tasks) {
+    public void validateBeforeActivate(Course course, List<Task> tasks) {
         validateCourseStatus(course);
         validateTaskTypes(tasks);
         validateTaskOrder(tasks);

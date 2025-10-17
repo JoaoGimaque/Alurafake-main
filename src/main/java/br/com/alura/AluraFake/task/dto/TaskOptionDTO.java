@@ -1,16 +1,14 @@
 package br.com.alura.AluraFake.task.dto;
 
-import jakarta.validation.constraints.*;
-
 public class TaskOptionDTO {
     private String option;
-    private boolean correct;
+    private boolean isCorrect;
 
     public TaskOptionDTO() {}
 
-    public TaskOptionDTO(String option, boolean correct) {
+    public TaskOptionDTO(String option, boolean isCorrect) {
         this.option = option;
-        this.correct = correct;
+        this.isCorrect = isCorrect;
     }
 
     public String getOption() {
@@ -22,10 +20,10 @@ public class TaskOptionDTO {
     }
 
     public boolean isCorrect() {
-        return correct;
+        return isCorrect;
     }
 
     public void setCorrect(boolean isCorrect) {
-        this.correct = isCorrect;
+        this.isCorrect = isCorrect;
     }
 }

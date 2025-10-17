@@ -1,212 +1,109 @@
-# Case Tecnico Alura
-Seja bem-vindo ao teste para desenvolvedor Java Pleno da Alura. Neste
-desafio, simulamos uma parte do nosso domínio para que você possa demonstrar seus conhecimentos. 
-Não há respostas certas ou erradas, nosso objetivo é avaliar como você aplica lógica e 
-conceitos de orientação a objetos para solucionar problemas.
+📚 AluraFake — Case Técnico Java Pleno
+Este projeto foi desenvolvido como parte do desafio técnico para desenvolvedor Java Pleno da Alura. Ele simula parte do domínio da plataforma Alura, focando na modelagem de cursos e atividades interativas, com validações específicas e regras de negócio aplicadas via API REST.
 
-## Requisitos
+⚙️ Tecnologias Utilizadas
+Java 21
 
-- Utilizar java 18+
-- Utilizar Spring boot
-- Utilizar Spring data JPA
-- Utilizar mysql
-- utilizar criação de tabelas manuais ([flyway](https://www.baeldung.com/database-migrations-with-flyway))
+Spring Boot
 
-## Orientações
+Spring Data JPA
 
-1. Suba o templete incial do projeto no seu github e deixe o repositório público(Seus commits serão avaliados).
-2. Abra o projeto na IDE de sua preferência.
-3. requisitos estão em português, mas lembre-se de no código escrever tudo em inglês.
-4. bônus não é obrigatório e não possui ordem, então você pode realizar apenas um dos que
-   são citados lá, de acordo com sua preferência.
+MySQL
 
-## Desafio
+Flyway
 
-Já disponibilizamos um projeto base como ponto de partida, no qual as tecnologias exigidas já estão configuradas. 
-Algumas lógicas relacionadas às entidades usuário e curso já estão implementadas, 
-e podem ser utilizadas como orientação para a resolução das questões.
+JUnit 5 + AssertJ + MockMvc
 
-**Importante:** Não se preocupe com a parte visual, toda a interação devem ser feitas
-por API.
+Postman — para testar e documentar os endpoints da API
 
-### Questão 1 — Modelagem de Atividades
+📦 Estrutura do Projeto
+O projeto está dividido em pacotes que representam o domínio da aplicação:
 
-Na Alura, os cursos possuem **atividades interativas** que ajudam no processo de aprendizado.  
-Elas podem ser de diferentes formatos, cada uma com suas regras específicas.
+user — modela os usuários da plataforma (estudantes e instrutores)
 
-Você deve implementar a modelagem dessas atividades, de acordo com os requisitos abaixo.  
-Os esboços dos endpoints já estão criados — sua tarefa será **implementar a lógica completa** para cada tipo de atividade.
+course — representa os cursos criados por instrutores
 
-##### Regras gerais
-- O enunciado (`statement`) deve ter no mínimo 4 e no máximo 255 caracteres.
-- O curso não pode ter duas questões com o mesmo enunciado
-- A ordem deve ser um número inteiro positivo.
-- Um curso só pode receber atividades se seu status for `BULDING`.
+task — define as atividades interativas dos cursos, com três tipos:
 
-#### Tipos de atividade
+Resposta Aberta (OPEN_TEXT)
 
-##### 1.1 — Atividade de Resposta Aberta
+Alternativa Única (SINGLE_CHOICE)
 
-**Endpoint:** `/task/new/opentext`
-```bash
-curl -w "%{http_code}\n" -X POST http://localhost:8080/task/new/opentext \
-  -H "Content-Type: application/json" \
-  -d '{
-        "courseId": 42,
-        "statement": "O que aprendemos na aula de hoje?",
-        "order": 1
-      }'
- ```
+Múltipla Escolha (MULTIPLE_CHOICE)
 
-#### 1.2 — Atividade de alternativa única
+taskoption — representa as alternativas das atividades de escolha
 
-**Endpoint:** `/task/new/singlechoice`
-```bash
-curl -w "%{http_code}\n" -X POST http://localhost:8080/task/new/singlechoice \
-  -H "Content-Type: application/json" \
-  -d '{
-        "courseId": 42,
-        "statement": "O que aprendemos hoje?",
-        "order": 2,
-        "options": [
-            {
-                "option": "Java",
-                "isCorrect": true
-            },
-            {
-                "option": "Python",
-                "isCorrect": false
-            },
-            {
-                "option": "Ruby",
-                "isCorrect": false
-            }
-        ]
-      }'
- ```
+📌 Funcionalidades Implementadas
+✅ Criação de Cursos
+Endpoint: POST /course/new
 
-##### Regras
-- A atividade deve ter no minimo 2 e no máximo 5 alternativas.
-- A atividade deve ter uma única alternativa correta.
-- As alternativas devem ter no mínimo 4 e no máximo 80 caracteres.
-- As alternativas não podem ser iguais entre si.
-- As alternativas não podem ser iguais ao enunciado da atividade.
+Permite cadastrar um novo curso com nome, descrição e e-mail do instrutor
 
-##### 1.3 — Atividade de múltipla escolha
+Valida se o instrutor existe e possui a role adequada
 
-**Endpoint:** `/task/new/multiplechoice`
-```bash
-curl -w "%{http_code}\n" -X POST http://localhost:8080/task/new/singlechoice \
-  -H "Content-Type: application/json" \
-  -d '{
-        "courseId": 42,
-        "statement": "O que aprendemos hoje?",
-        "order": 2,
-        "options": [
-            {
-                "option": "Java",
-                "isCorrect": true
-            },
-            {
-                "option": "Spring",
-                "isCorrect": true
-            },
-            {
-                "option": "Ruby",
-                "isCorrect": false
-            }
-        ]
-      }'
- ```
+✅ Criação de Atividades
+Endpoints:
 
-##### Regras
-- A atividade deve ter no minimo 3 e no máximo 5 alternativas.
-- A atividade deve ter duas ou mais alternativas corretas, e ao menos uma alternativa incorreta.
-- As alternativas devem ter no mínimo 4 e no máximo 80 caracteres.
-- As alternativas não podem ser iguais entre si.
-- As alternativas não podem ser iguais ao enunciado da atividade.
+POST /task/new/opentext
 
-#### 👉👉Importante👈👈
-Caso uma nova atividade seja adicionada a um curso com uma ordem que já está em uso, todas as atividades com aquela ordem ou superiores devem ser deslocadas uma posição para frente, garantindo que cada atividade tenha uma ordem única e sequencial.
-```
-Exemplo:
-Se o curso possui as seguintes atividades:
-Ordem 1 – Atividade A
-Ordem 2 – Atividade B
-Ordem 3 – Atividade C
+POST /task/new/singlechoice
 
-E for adicionada uma nova com ordem 2, a lista será reorganizada assim:
+POST /task/new/multiplechoice
 
-Ordem 1 – Atividade A
-Ordem 2 – Nova Atividade
-Ordem 3 – Atividade B (foi deslocada)
-Ordem 4 – Atividade C (foi deslocada)
+Validações específicas para cada tipo de atividade
 
-Validação de sequência:
-A ordem das atividades deve ser contínua, sem saltos. Ou seja, 
-não é permitido adicionar uma atividade com ordem 4 se ainda não existem atividades com ordens 3 (ou anteriores).
+Reorganização automática da ordem das atividades se houver conflito
 
-Exemplo inválido:
-Se o curso tem:
+✅ Publicação de Cursos
+Endpoint: POST /course/{id}/publish
 
-Ordem 1 – Atividade A
-Ordem 2 – Atividade B
+Regras:
 
-E uma nova atividade tenta ser inserida com ordem 4, o sistema deve lançar um erro informando que a sequência está incorreta.
+Curso deve estar com status BUILDING
 
-```
+Deve conter ao menos uma atividade de cada tipo
 
-### Questão 2 — Publicação de Cursos
+As atividades devem estar em ordem contínua
 
-Para publicar um curso, ele deve:
+Atualiza o status para PUBLISHED e define publishedAt
 
-- Conter ao menos uma atividade de cada tipo.
-- Ter atividades com `order` em sequência contínua (ex: 1, 2, 3...).
-- O curso só pode ser publicado se o status for `BUILDING`.
-- Ter o `status` atualizado para `PUBLISHED` e `publishedAt` com a data atual.
+✅ Relatório de Cursos por Instrutor
+Endpoint: GET /instructor/{id}/courses
 
-Implemente o endpoint `/course/{id}/publish` validando essas regras antes da publicação.
+Retorna lista de cursos criados por um instrutor
 
-Exemplo de requisição:
-```bash
-curl -w "%{http_code}\n" -X POST http://localhost:8080/course/42/publish
-```
+Inclui quantidade de atividades e total de cursos publicados
 
+🧪 Testes Automatizados
+O projeto inclui testes unitários e de integração para garantir o funcionamento das regras de negócio e persistência. Os testes cobrem:
 
-### Questão 3 — Relatório de Cursos por Instrutor
+Criação e validação de atividades
 
-Implemente um endpoint para gerar um relatório de cursos vinculados a um instrutor específico.
+Reorganização de ordem
 
-O relatório deve:
+Publicação de cursos
 
-- Receber o id do instrutor como parâmetro.
-- Caso o usuário não exista retornar 404.
-- Se o usuário existir mas não for instrutor retorna 400.
-- Retornar a lista de cursos criados por este instrutor, incluindo: id, title, status, publishedAt(se houver) e quantidade de atividades do curso.
-- Retornar também o total de cursos publicados desse instrutor.
-- Caso o instrutor não possua cursos, retornar uma lista vazia.
+Relatórios por instrutor
 
-Exemplo de requisição:
-```bash
-curl -w "%{http_code}\n" -X GET http://localhost:8080/instructor/7/courses
-```
+📮 Como Testar com Postman
+Importe a collection [AluraFake.postman_collection.json](https://.postman.co/workspace/My-Workspace~3182c6ff-3d98-468e-8850-03eaab3103d2/collection/19137794-055a6c77-7c9f-4acd-bda5-f2d2044d6c5c?action=share&creator=19137794) no Postman
 
-### Bônus (não obrigatório)
-Você não precisa implementar obrigatóriamente nenhum dos itens abaixo.
-Caso decida implementar, escolha **apenas um**:
+Configure a variável de ambiente baseUrl como http://localhost:8080
 
-- Spring Security: Proteger os endpoints de criação de atividades, criação/publicação de cursos e relatório de cursos por instrutor.
-O acesso deve ser restrito a usuários com a role INSTRUCTOR. Os demais endpoints de listagens podem ser acessados por qualquer usuário autenticado.
+Execute os endpoints na ordem:
 
-- Automação com GitHub Actions: Criar uma pipeline que execute os testes automaticamente a cada commit.
+Criar usuário instrutor
 
-## Considerações finais
+Criar curso
 
-- A avaliação do case será realizada exclusivamente com base nos requisitos e na forma como você utiliza **lógica**,
-**orientação a objetos** e **testes**. Qualquer tecnologia fora do escopo, como Swagger, Docker, ou aspectos visuais, 
-  não será considerada como um diferencial.
-- Testes são obrigatórios e serão avaliados como requisito.
-- Caso você tenha alguma dúvida sobre a descrição das questões, faça anotações no código e siga o que considerar mais adequado.
-- Outros candidatos estão concorrendo à mesma vaga, e códigos muito semelhantes resultarão na anulação do case.
-- Utilize ferramentas de IA, mas tenha cautela com o código gerado automaticamente. Caso avance para a próxima etapa, 
-a entrevista síncrona será baseada no código que você produziu.
+Adicionar atividades
+
+Publicar curso
+
+Consultar relatório
+
+🔐 Bônus (opcional)
+Spring Security: proteção dos endpoints de criação e publicação, acessível apenas por usuários com role INSTRUCTOR
+
+📝 Considerações Finais
+Este projeto foi desenvolvido com foco em lógica, orientação a objetos e testes. Toda a interação é feita via API REST, sem interface visual. O código está escrito em inglês, seguindo boas práticas de organização e validação.

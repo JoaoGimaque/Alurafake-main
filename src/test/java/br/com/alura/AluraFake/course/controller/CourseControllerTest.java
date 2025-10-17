@@ -1,6 +1,12 @@
-package br.com.alura.AluraFake.course;
+package br.com.alura.AluraFake.course.controller;
 
-import br.com.alura.AluraFake.user.*;
+import br.com.alura.AluraFake.course.dto.NewCourseDTO;
+import br.com.alura.AluraFake.course.model.Course;
+import br.com.alura.AluraFake.course.repository.CourseRepository;
+import br.com.alura.AluraFake.course.service.CourseService;
+import br.com.alura.AluraFake.user.model.Role;
+import br.com.alura.AluraFake.user.model.User;
+import br.com.alura.AluraFake.user.repository.UserRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,19 +17,22 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.*;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(CourseController.class)
 class CourseControllerTest {
-
     @Autowired
     private MockMvc mockMvc;
     @MockBean
     private UserRepository userRepository;
     @MockBean
     private CourseRepository courseRepository;
+    @MockBean
+    private CourseService courseService;
     @Autowired
     private ObjectMapper objectMapper;
 
@@ -111,4 +120,29 @@ class CourseControllerTest {
                 .andExpect(jsonPath("$[2].description").value("Curso de spring"));
     }
 
+    @Test
+    void publishCourse__should_return_ok_when_course_can_be_published() throws Exception {
+        Long courseId = 42L;
+
+        Course course = mock(Course.class);
+        when(courseService.activateCourse(courseId)).thenReturn(course);
+
+        mockMvc.perform(post("/course/{id}/publish", courseId))
+                .andExpect(status().isOk());
+
+        verify(courseService, times(1)).activateCourse(courseId);
+    }
+
+    @Test
+    void publishCourse__should_return_error_when_course_cannot_be_published() throws Exception {
+        Long courseId = 42L;
+
+        when(courseService.activateCourse(courseId))
+                .thenThrow(new IllegalStateException("Curso não pode ser publicado"));
+
+        mockMvc.perform(post("/course/{id}/publish", courseId))
+                .andExpect(status().isBadRequest());
+
+        verify(courseService, times(1)).activateCourse(courseId);
+    }
 }
