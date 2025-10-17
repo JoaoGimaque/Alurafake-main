@@ -1,4 +1,4 @@
-package br.com.alura.AluraFake.user;
+package br.com.alura.AluraFake.user.model;
 
 import br.com.alura.AluraFake.util.PasswordGeneration;
 import jakarta.persistence.*;
@@ -6,6 +6,7 @@ import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
+@Table(name = "User")
 public class User {
 
     @Id

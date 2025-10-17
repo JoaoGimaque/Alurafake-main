@@ -1,6 +1,6 @@
 package br.com.alura.AluraFake.course.model;
 
-import br.com.alura.AluraFake.user.User;
+import br.com.alura.AluraFake.user.model.User;
 import jakarta.persistence.*;
 import org.springframework.util.Assert;
 
@@ -62,5 +62,29 @@ public class Course {
 
     public LocalDateTime getPublishedAt() {
         return publishedAt;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public void setInstructor(User instructor) {
+        this.instructor = instructor;
+    }
+
+    public void setPublishedAt(LocalDateTime publishedAt) {
+        this.publishedAt = publishedAt;
     }
 }

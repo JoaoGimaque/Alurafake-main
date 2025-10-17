@@ -3,6 +3,7 @@ package br.com.alura.AluraFake.task.service;
 import br.com.alura.AluraFake.course.model.Course;
 import br.com.alura.AluraFake.course.model.Status;
 import br.com.alura.AluraFake.course.repository.CourseRepository;
+import br.com.alura.AluraFake.task.dto.TaskListItemDTO;
 import br.com.alura.AluraFake.task.model.Task;
 import br.com.alura.AluraFake.task.repository.TaskRepository;
 import br.com.alura.AluraFake.task.validator.TaskValidator;
@@ -75,6 +76,12 @@ public class TaskService {
                 .forEach(t -> t.setTaskOrder(t.getTaskOrder() + 1));
 
         taskRepository.saveAll(tasks);
+    }
+
+    public List<TaskListItemDTO> getAllTasks() {
+        return taskRepository.findAll().stream()
+                .map(TaskListItemDTO::new)
+                .toList();
     }
 
 }

@@ -1,5 +1,6 @@
 package br.com.alura.AluraFake.course.repository;
 
+import br.com.alura.AluraFake.course.dto.InstructorCourseReportDTO;
 import br.com.alura.AluraFake.course.model.Course;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;

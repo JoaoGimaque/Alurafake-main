@@ -1,6 +1,7 @@
 package br.com.alura.AluraFake.task.controller;
 
 import br.com.alura.AluraFake.task.dto.NewTaskDTO;
+import br.com.alura.AluraFake.task.dto.TaskListItemDTO;
 import br.com.alura.AluraFake.task.model.Task;
 import br.com.alura.AluraFake.task.model.TaskOption;
 import br.com.alura.AluraFake.task.model.Type;
@@ -59,6 +60,12 @@ public class TaskController {
         Task saved = taskService.createTask(dto.getCourseId(), task);
 
         return ResponseEntity.ok(saved);
+    }
+
+    @GetMapping("/all")
+    public ResponseEntity<List<TaskListItemDTO>> listAllTasks() {
+        List<TaskListItemDTO> tasks = taskService.getAllTasks();
+        return ResponseEntity.ok(tasks);
     }
 
 }
