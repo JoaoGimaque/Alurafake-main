@@ -86,7 +86,7 @@ Publicação de cursos
 Relatórios por instrutor
 
 📮 Como Testar com Postman
-Importe a collection [AluraFake.postman_collection.json](https://.postman.co/workspace/My-Workspace~3182c6ff-3d98-468e-8850-03eaab3103d2/collection/19137794-055a6c77-7c9f-4acd-bda5-f2d2044d6c5c?action=share&creator=19137794) no Postman
+Importe a collection [AluraFake.postman_collection.json](https://postman.co/workspace/My-Workspace~3182c6ff-3d98-468e-8850-03eaab3103d2/collection/19137794-055a6c77-7c9f-4acd-bda5-f2d2044d6c5c?action=share&creator=19137794) no Postman
 
 Configure a variável de ambiente baseUrl como http://localhost:8080
 
